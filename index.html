@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Forms</title>
+    <style>
+    body{
+        font-family: system-ui;
+        margin: 0;
+        padding: 0;
+        color: #3b3b3b;
+    }
+
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    form {
+        width: 40%;
+        min-width: 360px;
+        border: 1px solid #e3e3e3;
+        padding: 20px;
+    }
+    form label {
+        margin-bottom: 8px;
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid #57ad00;
+        padding: 5px;
+        box-sizing: border-box;
+        font-weight: bold;
+    }
+    form input{
+        display: block;
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #e3e3e3;
+        padding: 15px;
+        box-sizing: border-box;
+        margin-bottom: 8px;
+        outline: none;
+    }
+    form button{
+        background: #57ad00;
+        border: 0;
+        color: white;
+        display: block;
+        width: 100%;
+        border-radius: 5px;
+        padding: 15px;
+        font-size: 1rem;
+    }
+    form button:hover{
+        background: #88af00;
+    }
+
+    .overlay{
+        background: rgba(0,0,0,.8);
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        display: none;
+        transition: all .5s;
+    }
+    .overlay.is-active{
+        display: block;
+        transition: all .5s;
+    }
+
+    form input.is-active{
+        position: relative;
+        z-index: 3;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="#">
+            <label for="name">Iniciar Sesion</label>
+            <input type="text" name="name" autocomplete="off" placeholder="Nombre de usuario">
+            <input type="password" autocomplete="off" placeholder="contraseña">
+            <button type="submit" class="btn-submit">Enviar</button>
+        </form>
+        <div class="overlay" id="overlay">
+        </div>
+    </div>
+    <script>
+        const $inputList = document.querySelectorAll('input');
+        const $overlay = document.querySelector('#overlay');
+
+        
+        
+        $inputList.forEach(element => {
+            element.addEventListener('focus', focus);
+            element.addEventListener('blur', blur);
+        });
+        
+        $overlay.addEventListener('click', (event) => {
+            console.log(event)
+            $overlay.classList.remove('is-active')
+            const $maybeIsAnInput = document.elementFromPoint(event.clientX, event.clientY)
+            if ($maybeIsAnInput.tagName === 'INPUT') {
+                $maybeIsAnInput.focus()
+            }
+    })
+        
+        function focus(e){
+            event.target.classList.add('is-active')
+            $overlay.classList.add('is-active')
+        }
+        function blur(e){
+            e.target.classList.remove('is-active')
+        }
+        </script>
+</body>
+</html>
