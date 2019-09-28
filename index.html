@@ -78,14 +78,24 @@
         position: relative;
         z-index: 3;
     }
+    img{
+        width: 100%;
+        height: auto;;
+    }
     </style>
 </head>
 <body>
     <div class="container">
-        <form action="#">
+        <form action="#" id='form'>
             <label for="name">Iniciar Sesion</label>
             <input type="text" name="name" autocomplete="off" placeholder="Nombre de usuario">
-            <input type="password" autocomplete="off" placeholder="contraseña">
+            <input type="file" name="image" id='file'>
+            <div class="preview">
+                <p id="username">
+
+                </p>
+                <img src="" alt="" id="image">
+            </div>
             <button type="submit" class="btn-submit">Enviar</button>
         </form>
         <div class="overlay" id="overlay">
@@ -103,7 +113,6 @@
         });
         
         $overlay.addEventListener('click', (event) => {
-            console.log(event)
             $overlay.classList.remove('is-active')
             const $maybeIsAnInput = document.elementFromPoint(event.clientX, event.clientY)
             if ($maybeIsAnInput.tagName === 'INPUT') {
@@ -118,6 +127,47 @@
         function blur(e){
             e.target.classList.remove('is-active')
         }
+
+
+        //Form data 
+
+        const $username = document.querySelector('#username')
+        const $image = document.querySelector('#image')
+        const $file =  document.querySelector('#file')
+        const $form = document.querySelector('#form')
+
+
+        function renderImage(formData){
+            const file = formData.get('image')
+            const image = URL.createObjectURL(file);
+            // console.log(image)
+            $image.setAttribute('src', image)
+
+
+        }
+
+        function renderUsername(formData){
+            const userName = formData.get('name')
+            $username.textContent = userName
+        }
+        $file.addEventListener('change', function (event){
+            const formData = new FormData($form)
+            renderImage(formData)
+        })
+
+        $form.addEventListener('submit', function (event){
+            event.preventDefault();
+            const formData = new FormData($form)
+            // debugger
+            renderUsername(formData)
+            renderImage(formData)
+            // console.log(formData)
+            fetch('/', {
+                method: "POST",
+                body: formData
+            })
+        })
+
         </script>
 </body>
 </html>
